@@ -1,3 +1,13 @@
+/**
+ * @file: Pokemon.java
+ * @description: This class represents a Pokemon with various attributes such as name, type, and statistics.
+ *               It implements the Comparable interface to allow for comparison based on the Pokemon's name,
+ *               and provides methods for accessing and modifying each attribute. This class is used in conjunction
+ *               with a Binary Search Tree (BST) to store and manage Pokemon data.
+ * @author: Andrew Dwyer
+ * @date: September 24, 2024
+ */
+
 public class Pokemon implements Comparable<Pokemon> {
     // Fields of the Pokemon class
     private int id; // Unique identifier for each Pokemon

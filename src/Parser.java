@@ -1,3 +1,13 @@
+/**
+ * @file: Parser.java
+ * @description: This class represents a parser that processes input commands from a file to manage
+ *               a Binary Search Tree (BST) containing Pokemon objects. The parser can handle commands
+ *               such as inserting, searching, removing, and printing Pokemon records in the BST. The results
+ *               of these operations are written to an output file.
+ * @author: Andrew Dwyer
+ * @date: September 22, 2024
+ */
+
 import java.io.*;
 import java.util.Scanner;
 
