@@ -1,4 +1,3 @@
-// Node.java
 /**
  * @file: Node.java
  * @description: This class represents a node in a Binary Search Tree (BST).

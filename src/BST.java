@@ -99,23 +99,17 @@ public class BST<T extends Comparable<T>> implements Iterable<T> {
     // Recursive helper method for search
     private Node<T> searchRec(Node<T> node, T value) {
         if (node == null) {
-//            System.out.println("Node is null. Value not found.");
             return null; // Value not found
         }
-        System.out.println("Comparing with node: " + node.getElement());
         if (node.getElement().equals(value)) {
-            System.out.println("Value found: " + value);
             return node; // Value found
         }
         if (value.compareTo(node.getElement()) < 0) {
-//            System.out.println("Going left: " + value + " < " + node.getElement());
             return searchRec(node.getLeft(), value); // Search left subtree
         } else {
-//            System.out.println("Going right: " + value + " > " + node.getElement());
             return searchRec(node.getRight(), value); // Search right subtree
         }
     }
-
 
     // Iterator method to return an iterator for the BST (in-order traversal)
     @Override
