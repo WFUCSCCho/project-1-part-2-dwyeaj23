@@ -4,4 +4,6 @@ insert 150 Mewtwo Psychic None 680 106 110 90 154 90 130 1 true
 insert 1 Bulbasaur Grass Poison 318 45 49 49 65 65 45 1 false
 search Pikachu
 search Squirtle
+remove Pikachu
+remove Squirtle
 print
