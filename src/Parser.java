@@ -9,16 +9,51 @@
  */
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Parser {
-
-    // Create a BST tree of Pokemon type
     private BST<Pokemon> pokemonBST = new BST<>();
+    private ArrayList<Pokemon> pokemonList = new ArrayList<>();
 
-    // Constructor that accepts a filename to process
+    // Constructor that accepts a filename to process and loads the Pokémon data
     public Parser(String filename) throws FileNotFoundException {
-        process(new File(filename)); // Call process on the input file
+        loadPokemonData("./src/Pokemon.csv"); // Load all Pokémon data into the list
+        process(new File(filename)); // Process the input commands
+    }
+
+    // Method to load all Pokémon data from the CSV file into the ArrayList
+    private void loadPokemonData(String csvFile) throws FileNotFoundException {
+        try (Scanner scanner = new Scanner(new File(csvFile))) {
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine().trim();
+                if (line.isEmpty()) continue;
+
+                // Assuming CSV format: id,name,type1,type2,total,hp,attack,defense,specialAttack,specialDefense,speed,generation,isLegendary
+                String[] attributes = line.split(",");
+                int id = Integer.parseInt(attributes[0]);
+                String name = attributes[1];
+                String type1 = attributes[2];
+                String type2 = attributes[3].equals("None") ? "" : attributes[3];
+                int total = Integer.parseInt(attributes[4]);
+                int hp = Integer.parseInt(attributes[5]);
+                int attack = Integer.parseInt(attributes[6]);
+                int defense = Integer.parseInt(attributes[7]);
+                int specialAttack = Integer.parseInt(attributes[8]);
+                int specialDefense = Integer.parseInt(attributes[9]);
+                int speed = Integer.parseInt(attributes[10]);
+                int generation = Integer.parseInt(attributes[11]);
+                boolean isLegendary = Boolean.parseBoolean(attributes[12]);
+
+                // Create a new Pokemon object and add it to the list
+                Pokemon pokemon = new Pokemon(id, name, type1, type2, total, hp, attack, defense,
+                        specialAttack, specialDefense, speed, generation, isLegendary);
+                pokemonList.add(pokemon);
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("CSV file not found: " + csvFile);
+            throw e;
+        }
     }
 
     // Process the input file and handle commands
@@ -28,7 +63,7 @@ public class Parser {
                 String line = scanner.nextLine().trim(); // Remove leading and trailing spaces
                 if (line.isEmpty()) continue; // Skip blank lines
 
-                // Split the command by spaces or commas
+                // Split the command by spaces
                 String[] command = line.split("\\s+");
 
                 // Call operate_BST to execute the command
@@ -43,30 +78,18 @@ public class Parser {
         try {
             switch (operation) {
                 case "insert":
-                    if (command.length < 14) { // Expecting 14 attributes for Pokemon
+                    if (command.length < 2) {
                         writeToFile("Invalid Command", "./result.txt");
                         return;
                     }
-                    // Parse the Pokemon attributes from the command
-                    int id = Integer.parseInt(command[1]);
-                    String name = command[2];
-                    String type1 = command[3];
-                    String type2 = command[4].equals("None") ? "" : command[4];
-                    int total = Integer.parseInt(command[5]);
-                    int hp = Integer.parseInt(command[6]);
-                    int attack = Integer.parseInt(command[7]);
-                    int defense = Integer.parseInt(command[8]);
-                    int specialAttack = Integer.parseInt(command[9]);
-                    int specialDefense = Integer.parseInt(command[10]);
-                    int speed = Integer.parseInt(command[11]);
-                    int generation = Integer.parseInt(command[12]);
-                    boolean isLegendary = Boolean.parseBoolean(command[13]);
-
-                    // Create Pokemon object and insert it into the BST
-                    Pokemon pokemon = new Pokemon(id, name, type1, type2, total, hp, attack, defense,
-                            specialAttack, specialDefense, speed, generation, isLegendary);
-                    pokemonBST.insert(pokemon);
-                    writeToFile("insert " + name, "./result.txt");
+                    String insertName = command[1];
+                    Pokemon insertPokemon = findPokemonByName(insertName);
+                    if (insertPokemon != null) {
+                        pokemonBST.insert(insertPokemon);
+                        writeToFile("insert " + insertName, "./result.txt");
+                    } else {
+                        writeToFile("Pokemon not found: " + insertName, "./result.txt");
+                    }
                     break;
 
                 case "search":
@@ -74,12 +97,9 @@ public class Parser {
                         writeToFile("Invalid Command", "./result.txt");
                         return;
                     }
-                    // Search by name
                     String searchName = command[1];
-                    System.out.println(searchName);
-                    Pokemon searchPokemon = new Pokemon(0, searchName, "", "", 0, 0, 0, 0, 0, 0, 0, 0, false);
-                    boolean found = pokemonBST.search(searchPokemon);
-                    if (found) {
+                    Pokemon searchPokemon = findPokemonByName(searchName);
+                    if (searchPokemon != null && pokemonBST.search(searchPokemon)) {
                         writeToFile("found " + searchName, "./result.txt");
                     } else {
                         writeToFile("search failed", "./result.txt");
@@ -91,11 +111,14 @@ public class Parser {
                         writeToFile("Invalid Command", "./result.txt");
                         return;
                     }
-                    // Remove by name
                     String removeName = command[1];
-                    Pokemon removePokemon = new Pokemon(0, removeName, "", "", 0, 0, 0, 0, 0, 0, 0, 0, false);
-                    pokemonBST.remove(removePokemon);
-                    writeToFile("removed " + removeName, "./result.txt");
+                    Pokemon removePokemon = findPokemonByName(removeName);
+                    if (removePokemon != null && pokemonBST.search(removePokemon)) {
+                        pokemonBST.remove(removePokemon);
+                        writeToFile("removed " + removeName, "./result.txt");
+                    } else {
+                        writeToFile("remove failed", "./result.txt");
+                    }
                     break;
 
                 case "print":
@@ -117,6 +140,17 @@ public class Parser {
             writeToFile("Invalid Command", "./result.txt");
         }
     }
+
+    // Helper method to find a Pokemon by name from the list
+    private Pokemon findPokemonByName(String name) {
+        for (Pokemon p : pokemonList) {
+            if (p.getName().equalsIgnoreCase(name)) {
+                return p;
+            }
+        }
+        return null;
+    }
+
     // Write the output to a result file
     public void writeToFile(String content, String filePath) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, true))) {

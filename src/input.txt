@@ -1,7 +1,7 @@
-insert 25 Pikachu Electric None 320 35 55 40 50 50 90 1 false
-insert 6 Charizard Fire Flying 534 78 84 78 109 85 100 1 false
-insert 150 Mewtwo Psychic None 680 106 110 90 154 90 130 1 true
-insert 1 Bulbasaur Grass Poison 318 45 49 49 65 65 45 1 false
+insert Pikachu
+insert Charizard
+insert Mewtwo
+insert Bulbasaur
 search Pikachu
 search Squirtle
 remove Pikachu
