@@ -79,45 +79,45 @@ public class Parser {
             switch (operation) {
                 case "insert":
                     if (command.length < 2) {
-                        writeToFile("Invalid Command", "./result.txt");
+                        writeToFile("Invalid Command", "./output.txt");
                         return;
                     }
                     String insertName = command[1];
                     Pokemon insertPokemon = findPokemonByName(insertName);
                     if (insertPokemon != null) {
                         pokemonBST.insert(insertPokemon);
-                        writeToFile("insert " + insertName, "./result.txt");
+                        writeToFile("insert " + insertName, "./output.txt");
                     } else {
-                        writeToFile("Pokemon not found: " + insertName, "./result.txt");
+                        writeToFile("Pokemon not found: " + insertName, "./output.txt");
                     }
                     break;
 
                 case "search":
                     if (command.length < 2) {
-                        writeToFile("Invalid Command", "./result.txt");
+                        writeToFile("Invalid Command", "./output.txt");
                         return;
                     }
                     String searchName = command[1];
                     Pokemon searchPokemon = findPokemonByName(searchName);
                     if (searchPokemon != null && pokemonBST.search(searchPokemon)) {
-                        writeToFile("found " + searchName, "./result.txt");
+                        writeToFile("found " + searchName, "./output.txt");
                     } else {
-                        writeToFile("search failed", "./result.txt");
+                        writeToFile("search failed", "./output.txt");
                     }
                     break;
 
                 case "remove":
                     if (command.length < 2) {
-                        writeToFile("Invalid Command", "./result.txt");
+                        writeToFile("Invalid Command", "./output.txt");
                         return;
                     }
                     String removeName = command[1];
                     Pokemon removePokemon = findPokemonByName(removeName);
                     if (removePokemon != null && pokemonBST.search(removePokemon)) {
                         pokemonBST.remove(removePokemon);
-                        writeToFile("removed " + removeName, "./result.txt");
+                        writeToFile("removed " + removeName, "./output.txt");
                     } else {
-                        writeToFile("remove failed", "./result.txt");
+                        writeToFile("remove failed", "./output.txt");
                     }
                     break;
 
@@ -127,17 +127,17 @@ public class Parser {
                     for (Pokemon p : pokemonBST) {
                         result.append(p.getName()).append(" ");
                     }
-                    writeToFile(result.toString().trim(), "./result.txt");
+                    writeToFile(result.toString().trim(), "./output.txt");
                     break;
 
                 default:
                     // Handle invalid commands
-                    writeToFile("Invalid Command", "./result.txt");
+                    writeToFile("Invalid Command", "./output.txt");
                     break;
             }
         } catch (Exception e) {
             // Handle invalid input cases (e.g., missing parameters)
-            writeToFile("Invalid Command", "./result.txt");
+            writeToFile("Invalid Command", "./output.txt");
         }
     }
 
